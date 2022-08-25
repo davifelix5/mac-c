@@ -1,16 +1,16 @@
 # Algoritmos em C
 
-Esse códigos exploram conceitos relacionados à construção de **algoritmos eficientes** escritos de forma mais **legível** e **elegante** possível.
+Esses códigos exploram conceitos relacionados à construção de **algoritmos eficientes** escritos de forma mais **legível** e **elegante** possível.
 
-Também referem-se a **estruturas de dados** como _pilhas_, havendo sua implementação na linguagem C e a **resolução de diversos problemas** propostosque utilizam essas estruturas de dados.
+Também referem-se a **estruturas de dados** como _pilhas_, havendo sua implementação na linguagem C e a **resolução de diversos problemas** propostos que utilizam essas estruturas de dados.
 
 ## Pilhas
 - A primeira estrutura de dados explorada foram as **pilhas**. Nelas, os primeiros elementos a serem adicionados são os primeiros a saírem, o que, em inglês, é classificado como _Last In, First Out_, ou seja, _LIFO_.
-- As pilhas contam com 3 principais operações
-  - Ver o topo da pilha (top): retorna o elemenro que está no topo da pilha
-  - Desempilhar (pop): desempilha e retorna o último elemento da pilha
-  - Empilhar (push): adiciona um elemento no topo da pilha
-  - Vazia (isEmpty): verifica se a pilha está vazia
+- As pilhas contam com 3 principais operações:
+  - Ver o topo da pilha (top): retorna o elemenro que está no topo da pilha;
+  - Desempilhar (pop): desempilha e retorna o último elemento da pilha;
+  - Empilhar (push): adiciona um elemento no topo da pilha;
+  - Vazia (isEmpty): verifica se a pilha está vazia.
   
 ### Problema 1
 - Dada uma sequência de `(`, `)`, `[`, `]`, `{` e `}`, verificar se essa sequência é ou não válida.
