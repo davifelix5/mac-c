@@ -1,39 +1,6 @@
 #include <stdio.h>
 #include "pilha.h"
 
-/*
- * Objetivo do algoritmo:
- *
- *    Dada uma expressão matemática na notação isual (infixa),
- * determinar uma expressão equivalente na notação posfixa
- *
- * Exemplo: A*B/C-D deve retornar AB*C/D-
- *
- * /
-
-/*
- * Lógica do algoritmo:
- *
- * Para cada caractere da string:
- *   Se for um operando, então:
- *      Imprima operando
- *   Senão, se for abre parênteses:
- *      Empilha
- *   Semão, se for ):
- *      Se a pilha estiver vazia:
- *        A operação é inválida, para o programa
- *      Enquanto topo da pilha não for (:
- *        Imprima e desempilhe o topo da pilha
- *      Desempilha
- *   Senão, se for outro operador (+, -, *, /), então:
- *      Enquanto a não está vazia ou o topo da pilha tem mais prioridade que o caractere atual:
- *        Imprima e desempilhe o topo da pilha
- *      Empilhe o operando
- *
- *  Enquanto a pilha não estiver vazia:
- *     Imprima e desempilhe o operando
- */
-
 int prioridade(char);
 void posfixa(char *);
 
