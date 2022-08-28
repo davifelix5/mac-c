@@ -40,7 +40,7 @@ Senão:
 Para cada caractere da string:
  Se for um operando, então:
     Imprima operando
- Senão, se for abre parênteses:
+ Senão, se for '(':
     Empilha o caractere
  Senão, se for ')':
     Se a pilha estiver vazia:
@@ -49,7 +49,7 @@ Para cada caractere da string:
       Desempilhe e imprima o topo da pilha
     Desempilha
  Senão, se for outro operador (+, -, *, /), então:
-    Enquanto a não está vazia ou o topo da pilha tem mais prioridade que o caractere atual:
+    Enquanto a pilha não está vazia ou o topo da pilha tem mais prioridade que o caractere atual:
       Desempilhe e imprima o topo da pilha
     Empilhe o operando
  Enquanto a pilha não estiver vazia:
