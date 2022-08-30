@@ -45,7 +45,8 @@ int empty(p_stack p)
 void resize(p_stack p)
 {
   int i;
-  item *new_v = malloc(2 * p->max * sizeof(int));
+  item *new_v = malloc(2 * p->max * sizeof(item));
+  p->max *= 2;
   for (i = 0; i < p->top; i++)
     new_v[i] = p->v[i];
   free(p->v);
