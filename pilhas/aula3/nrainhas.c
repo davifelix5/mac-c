@@ -2,28 +2,6 @@
 #include <stdlib.h>
 #include "pilha.h"
 
-/*
-  Receba n rainhas
-  Declare um vetor v no qual cada índice i é uma linha e cada valor v[i] = j
-é uma coluna onde está localizada uma rainha
-  Inicie um contador i=0 para rainhas posicionadas
-
-  Comece j = 0, i = 0
-  Enquanto i < n
-    Tente posicionar a rainha em v[k] = j para todo k de j até n
-    Se der certo,
-      i++; j=0
-      Empilhe a decisão
-    Se não der certo então,
-      Se não tiver uma última decisão para desempilhar
-        return 0
-      Desempilhe a decisão anterior d
-      i--; j = d + 1
-
-  printa o tabuleiro
-  return 1
-*/
-
 #define EMPTY -1
 
 int nrainhas(int);
