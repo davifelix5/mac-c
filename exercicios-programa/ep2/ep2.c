@@ -10,16 +10,7 @@
 #include <stdlib.h>
 
 #include "pilha.h"
-
-#define HORIZONTAL 0
-#define VERTICAL 1
-
-int preenche(char **tab, int m, int n, palavra *palavras, posicao *posicoes, int n_palavras, int n_pos);
-void adicionaPosicao(int lin, int col, int dir, int n_pos, posicao *posicoes);
-void inserirPalavra(char **tab, int **mapaTab, posicao pos, palavra plv);
-void removePalavra(char **tab, int **mapaTab, posicao pos, palavra plv);
-int encaixar(char **tab, int m, int n, palavra plv, posicao pos);
-void imprime_matriz(char **, int, int);
+#include "ep2.h"
 
 int main()
 {
@@ -277,7 +268,6 @@ void adicionaPosicao(int lin, int col, int dir, int n_pos, posicao *posicoes)
   p.lin = lin;
   p.col = col;
   p.dir = dir;
-  p.ocupada = 0;
   posicoes[n_pos] = p;
 }
 

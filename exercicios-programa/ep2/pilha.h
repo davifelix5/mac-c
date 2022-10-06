@@ -1,20 +1,5 @@
 typedef struct
 {
-  int tamanho;
-  char caracteres[50];
-  int utilizada;
-} palavra;
-
-typedef struct
-{
-  int lin;
-  int col;
-  int dir;
-  int ocupada;
-} posicao;
-
-typedef struct
-{
   int palavra;
   int posicao;
 } item;
