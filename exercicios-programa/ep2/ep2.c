@@ -3,6 +3,9 @@
 
 #include "pilha.h"
 
+#define HORIZONTAL 0
+#define VERTICAL 1
+
 int preenche(char **tab, int m, int n, palavra *palavras, posicao *posicoes, int n_palavras, int n_pos);
 void adicionaPosicao(int lin, int col, int dir, int n_pos, posicao *posicoes);
 void inserirPalavra(char **tab, int **mapaTab, posicao pos, palavra plv);
@@ -45,17 +48,19 @@ int main()
       {
         int vert, hor;
 
+        /* Verifica se uma palavra pode ser colocada horizontal ou verticalmente
+          naquela posição */
         vert = (i - 1 < 0 || tab[i - 1][j] == '*') && i + 1 < m && tab[i + 1][j] != '*';
         hor = (j - 1 < 0 || tab[i][j - 1] == '*') && j + 1 < n && tab[i][j + 1] != '*';
 
         if (vert && tab[i][j] != '*')
         {
-          adicionaPosicao(i, j, 1, n_pos, posicoes);
+          adicionaPosicao(i, j, VERTICAL, n_pos, posicoes);
           n_pos++;
         }
         if (hor && tab[i][j] != '*')
         {
-          adicionaPosicao(i, j, 0, n_pos, posicoes);
+          adicionaPosicao(i, j, HORIZONTAL, n_pos, posicoes);
           n_pos++;
         }
       }
@@ -120,16 +125,14 @@ int preenche(char **tab, int m, int n, palavra *palavras, posicao *posicoes, int
     while (palv < n_palavras && !encaixado)
     {
       if (!palavras[palv].utilizada)
-      {
         encaixado = encaixar(tab, m, n, palavras[palv], posicoes[pos]);
-      }
       palv++;
     }
     if (encaixado)
     {
+      item x;
       /* Empilha */
       palavras[palv - 1].utilizada = 1;
-      item x;
       x.posicao = pos;
       x.palavra = palv - 1;
 
@@ -140,6 +143,7 @@ int preenche(char **tab, int m, int n, palavra *palavras, posicao *posicoes, int
 
       /* Vai para a proxima posição */
       pos++;
+      /* Reinicia as palavras */
       palv = 0;
     }
     else if (!pilhaVazia(encaixes))
@@ -169,8 +173,7 @@ int preenche(char **tab, int m, int n, palavra *palavras, posicao *posicoes, int
 int encaixar(char **tab, int m, int n, palavra plv, posicao pos)
 {
   int formaPalavra = 1, tamanhoPercorrido = 0;
-  /* Direção horizontal */
-  if (pos.dir == 0)
+  if (pos.dir == HORIZONTAL)
   {
     int col;
 
@@ -184,11 +187,11 @@ int encaixar(char **tab, int m, int n, palavra plv, posicao pos)
       tamanhoPercorrido++;
     }
   }
-  /* Direção vertical (loop análogo ao primeiro) */
   else
   {
     int lin;
 
+    /* Loop análogo ao anterior */
     tamanhoPercorrido = 0;
     for (lin = pos.lin; lin < m && formaPalavra && tab[lin][pos.col] != '*'; lin++)
     {
@@ -209,7 +212,7 @@ int encaixar(char **tab, int m, int n, palavra plv, posicao pos)
 void inserirPalavra(char **tab, int **mapa, posicao pos, palavra plv)
 {
   int lin, col, tam;
-  if (pos.dir == 0)
+  if (pos.dir == HORIZONTAL)
   {
     lin = pos.lin;
     for (col = pos.col, tam = 0; tam < plv.tamanho; tam++, col++)
@@ -232,11 +235,13 @@ void inserirPalavra(char **tab, int **mapa, posicao pos, palavra plv)
 void removePalavra(char **tab, int **mapa, posicao pos, palavra plv)
 {
   int lin, col, tam;
-  if (pos.dir == 0)
+  if (pos.dir == HORIZONTAL)
   {
     lin = pos.lin;
     for (col = pos.col, tam = 0; tam < plv.tamanho; tam++, col++)
     {
+      /* Remove a letra apenas se não há outra palavra da qual
+        ela faça parte */
       if (mapa[pos.lin][col] == 1)
         tab[pos.lin][col] = '0';
       mapa[pos.lin][col] -= 1;
