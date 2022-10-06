@@ -3,22 +3,25 @@
 
 #include "pilha.h"
 
-int preenche(char **tab, int m, int n, int quantidade_palavras);
+int preenche(char **tab, int m, int n, palavra *palavras, posicao *posicoes, int n_palavras, int n_pos);
+void adicionaPosicao(int lin, int col, int dir, int n_pos, posicao *posicoes);
+void inserirPalavra(char **tab, int **mapaTab, posicao pos, palavra plv);
+void removePalavra(char **tab, int **mapaTab, posicao pos, palavra plv);
+int encaixar(char **tab, int m, int n, palavra plv, posicao pos);
 void imprime_matriz(char **, int, int);
-void ler_palavra(palavra *p);
-void inserirPalavra(char **tab, int i, int j, int dir, palavra p);
-void removePalavra(char **tab, int i, int j, int dir, palavra p);
-int encaixar(char **tab, int m, int n, palavra p, int i, int j, int dir);
 
 int main()
 {
   char **tab;
-  int m, n, inst = 1, sol;
+  palavra *palavras;
+  posicao *posicoes;
+  int m, n, inst = 1, sol = 0;
 
   scanf("%d %d", &m, &n);
   while (m != 0 && n != 0)
   {
-    int i, j, qtd_palavras, tipo_posicao;
+    int i, j, k, numero;
+    int n_pos = 0, n_plvrs = 0;
 
     tab = malloc(m * sizeof(char *));
     for (i = 0; i < m; i++)
@@ -26,17 +29,55 @@ int main()
       tab[i] = malloc(n * sizeof(char));
       for (j = 0; j < n; j++)
       {
-        scanf("%d", &tipo_posicao);
-        if (tipo_posicao < 0)
+        scanf("%d", &numero);
+        if (numero < 0)
           tab[i][j] = '*';
         else
           tab[i][j] = '0';
       }
     }
 
-    scanf("%d", &qtd_palavras);
+    posicoes = malloc(m * n * sizeof(posicao));
 
-    sol = preenche(tab, m, n, qtd_palavras);
+    for (i = 0; i < m; i++)
+    {
+      for (j = 0; j < n; j++)
+      {
+        int vert, hor;
+
+        vert = (i - 1 < 0 || tab[i - 1][j] == '*') && i + 1 < m && tab[i + 1][j] != '*';
+        hor = (j - 1 < 0 || tab[i][j - 1] == '*') && j + 1 < n && tab[i][j + 1] != '*';
+
+        if (vert && tab[i][j] != '*')
+        {
+          adicionaPosicao(i, j, 1, n_pos, posicoes);
+          n_pos++;
+        }
+        if (hor && tab[i][j] != '*')
+        {
+          adicionaPosicao(i, j, 0, n_pos, posicoes);
+          n_pos++;
+        }
+      }
+    }
+
+    scanf("%d", &n_plvrs);
+
+    palavras = malloc(n_plvrs * sizeof(palavra));
+
+    for (k = 0; k < n_plvrs; k++)
+    {
+      int tam = 1;
+      palavra p;
+      scanf("%s", p.caracteres);
+      while (p.caracteres[tam] != '\0')
+        tam++;
+      p.tamanho = tam;
+      p.utilizada = 0;
+      palavras[k] = p;
+    }
+
+    sol = preenche(tab, m, n, palavras, posicoes, n_plvrs, n_pos);
 
     printf("Instância %d\n", inst);
     if (sol)
@@ -49,6 +90,9 @@ int main()
       free(tab[i]);
     free(tab);
 
+    free(posicoes);
+    free(palavras);
+
     inst++;
 
     scanf("%d %d", &m, &n);
@@ -57,122 +101,85 @@ int main()
   return 0;
 }
 
-int preenche(char **tab, int m, int n, int quantidade_palavras)
+int preenche(char **tab, int m, int n, palavra *palavras, posicao *posicoes, int n_palavras, int n_pos)
 {
-  int sol = 1, k = 0;
-  int i = 0, j = 0, dir = 0;
-  int arm = 0;
-  palavra *armazenadas = malloc(quantidade_palavras * sizeof(palavra));
-  palavra *palavraAtual = malloc(sizeof(palavra));
+  int sol = 1, pos = 0, palv = 0;
+  int **mapaTab = malloc(m * sizeof(int *)), i, j;
   pilha *encaixes = cria();
 
-  ler_palavra(palavraAtual);
+  for (i = 0; i < m; i++)
+  {
+    mapaTab[i] = malloc(n * sizeof(int));
+    for (j = 0; j < n; j++)
+      mapaTab[i][j] = 0;
+  }
 
-  while (k < quantidade_palavras && sol)
+  while (pos < n_pos && sol)
   {
     int encaixado = 0;
-    while (i < m && !encaixado)
+    while (palv < n_palavras && !encaixado)
     {
-      if (j >= n)
-        j = 0;
-      while (j < n && !encaixado)
+      if (!palavras[palv].utilizada)
       {
-        if (dir > 1)
-          dir = 0;
-        if (tab[i][j] == '0' || tab[i][j] == palavraAtual->caracteres[0])
-        {
-          while (dir < 2 && !encaixado)
-          {
-            /*  printf("Tentando %s %d %d %d\n", palavraAtual->caracteres, i, j, dir); */
-            encaixado = encaixar(tab, m, n, *palavraAtual, i, j, dir);
-            dir++;
-          }
-        }
-        j++;
+        encaixado = encaixar(tab, m, n, palavras[palv], posicoes[pos]);
       }
-      i++;
+      palv++;
     }
     if (encaixado)
     {
-      /* printf("%s %d %d %d\n", palavraAtual->caracteres, i - 1, j - 1, dir - 1); */
-      k++;
       /* Empilha */
+      palavras[palv - 1].utilizada = 1;
       item x;
-      x.lin = i - 1;
-      x.col = j - 1;
-      x.dir = dir - 1;
-      x.p = *palavraAtual;
+      x.posicao = pos;
+      x.palavra = palv - 1;
+
       empilha(encaixes, x);
 
       /* Insere no tabuleiro */
-      inserirPalavra(tab, i - 1, j - 1, dir - 1, *palavraAtual);
+      inserirPalavra(tab, mapaTab, posicoes[pos], palavras[palv - 1]);
 
-      /* Identifica a proxima palavra */
-      if (arm == 0 && k < quantidade_palavras)
-        ler_palavra(palavraAtual);
-      else
-      {
-        *palavraAtual = armazenadas[--arm];
-        /* printf("Pegando armazenada: %s\n", palavraAtual->caracteres); */
-      }
-
-      /* Reseta valores */
-      i = j = dir = 0;
-      /* imprime_matriz(tab, m, n); */
+      /* Vai para a proxima posição */
+      pos++;
+      palv = 0;
     }
-    else if (i == m && j == n && !pilhaVazia(encaixes))
+    else if (!pilhaVazia(encaixes))
     {
-
       /* Desempilha */
       item ultimo = desempilha(encaixes);
-      /* printf("Desempilhei!\n"); */
-      k--;
-      i = ultimo.lin;
-      j = ultimo.col;
-      dir = ultimo.dir;
-      armazenadas[arm++] = *palavraAtual;
-      *palavraAtual = ultimo.p;
+      pos = ultimo.posicao;
+      palv = ultimo.palavra + 1;
+      palavras[palv - 1].utilizada = 0;
 
       /* Remove do tabuleiro */
-      removePalavra(tab, i, j, dir, *palavraAtual);
-      /* imprime_matriz(tab, m, n); */
-
-      /* Atualiza valores para continuar procurando */
-      dir = (dir + 1) % 2;
-      j++;
-      if (j >= n)
-      {
-        i++;
-        j = 0;
-      }
+      removePalavra(tab, mapaTab, posicoes[pos], palavras[palv - 1]);
     }
     else
       sol = 0;
   }
 
-  free(palavraAtual);
   destroi(encaixes);
-  free(armazenadas);
+
+  for (i = 0; i < m; i++)
+    free(mapaTab[i]);
+  free(mapaTab);
 
   return sol;
 }
 
-int encaixar(char **tab, int m, int n, palavra p, int i, int j, int dir)
+int encaixar(char **tab, int m, int n, palavra plv, posicao pos)
 {
   int formaPalavra = 1, tamanhoPercorrido = 0;
   /* Direção horizontal */
-  if (dir == 0)
+  if (pos.dir == 0)
   {
     int col;
-    if (j - 1 >= 0 && tab[i][j - 1] != '*')
-      formaPalavra = 0;
 
     /* Percorre a direção em questão até encontrar uma
       inconsistência na palavra ou uma barreira no tabuleiro */
     tamanhoPercorrido = 0;
-    for (col = j; col < n && formaPalavra && tab[i][col] != '*'; col++)
+    for (col = pos.col; col < n && formaPalavra && tab[pos.lin][col] != '*'; col++)
     {
-      if (tab[i][col] != '0' && tab[i][col] != p.caracteres[col - j])
+      if (tab[pos.lin][col] != '0' && tab[pos.lin][col] != plv.caracteres[col - pos.col])
         formaPalavra = 0;
       tamanhoPercorrido++;
     }
@@ -181,13 +188,11 @@ int encaixar(char **tab, int m, int n, palavra p, int i, int j, int dir)
   else
   {
     int lin;
-    if (i - 1 >= 0 && tab[i - 1][j] != '*')
-      formaPalavra = 0;
 
     tamanhoPercorrido = 0;
-    for (lin = i; lin < m && formaPalavra && tab[lin][j] != '*'; lin++)
+    for (lin = pos.lin; lin < m && formaPalavra && tab[lin][pos.col] != '*'; lin++)
     {
-      if (tab[lin][j] != '0' && tab[lin][j] != p.caracteres[lin - i])
+      if (tab[lin][pos.col] != '0' && tab[lin][pos.col] != plv.caracteres[lin - pos.lin])
         formaPalavra = 0;
       tamanhoPercorrido++;
     }
@@ -195,53 +200,68 @@ int encaixar(char **tab, int m, int n, palavra p, int i, int j, int dir)
 
   /* No fim, para a palavra encaixar, a quantidade de casas percorridas
   deve ser igual ao tamanho da palavra */
-  if (tamanhoPercorrido != p.tamanho)
+  if (tamanhoPercorrido != plv.tamanho)
     formaPalavra = 0;
 
   return formaPalavra;
 }
 
-void ler_palavra(palavra *p)
-{
-  int tam = 0;
-  scanf("%s", p->caracteres);
-  while (p->caracteres[tam] != '\0')
-    tam++;
-  p->tamanho = tam;
-}
-
-void inserirPalavra(char **tab, int i, int j, int dir, palavra p)
+void inserirPalavra(char **tab, int **mapa, posicao pos, palavra plv)
 {
   int lin, col, tam;
-  if (dir == 0)
+  if (pos.dir == 0)
   {
-    lin = i;
-    for (col = j, tam = 0; tam < p.tamanho; tam++, col++)
-      tab[i][col] = p.caracteres[tam];
+    lin = pos.lin;
+    for (col = pos.col, tam = 0; tam < plv.tamanho; tam++, col++)
+    {
+      mapa[pos.lin][col] += 1;
+      tab[pos.lin][col] = plv.caracteres[tam];
+    }
   }
   else
   {
-    col = j;
-    for (lin = i, tam = 0; tam < p.tamanho; tam++, lin++)
-      tab[lin][j] = p.caracteres[tam];
+    col = pos.col;
+    for (lin = pos.lin, tam = 0; tam < plv.tamanho; tam++, lin++)
+    {
+      mapa[lin][pos.col] += 1;
+      tab[lin][pos.col] = plv.caracteres[tam];
+    }
   }
 }
 
-void removePalavra(char **tab, int i, int j, int dir, palavra p)
+void removePalavra(char **tab, int **mapa, posicao pos, palavra plv)
 {
   int lin, col, tam;
-  if (dir == 0)
+  if (pos.dir == 0)
   {
-    lin = i;
-    for (col = j, tam = 0; tam < p.tamanho; tam++, col++)
-      tab[i][col] = '0';
+    lin = pos.lin;
+    for (col = pos.col, tam = 0; tam < plv.tamanho; tam++, col++)
+    {
+      if (mapa[pos.lin][col] == 1)
+        tab[pos.lin][col] = '0';
+      mapa[pos.lin][col] -= 1;
+    }
   }
   else
   {
-    col = j;
-    for (lin = i, tam = 0; tam < p.tamanho; tam++, lin++)
-      tab[lin][j] = '0';
+    col = pos.col;
+    for (lin = pos.lin, tam = 0; tam < plv.tamanho; tam++, lin++)
+    {
+      if (mapa[lin][pos.col] == 1)
+        tab[lin][pos.col] = '0';
+      mapa[lin][pos.col] -= 1;
+    }
   }
+}
+
+void adicionaPosicao(int lin, int col, int dir, int n_pos, posicao *posicoes)
+{
+  posicao p;
+  p.lin = lin;
+  p.col = col;
+  p.dir = dir;
+  p.ocupada = 0;
+  posicoes[n_pos] = p;
 }
 
 void imprime_matriz(char **tab, int m, int n)
