@@ -112,6 +112,10 @@ int preenche(char **tab, int m, int n, palavra *palavras, posicao *posicoes, int
   int **mapaTab = malloc(m * sizeof(int *)), i, j;
   pilha *encaixes = cria();
 
+  /* Vericando se a quantidade de palavras é validas */
+  if (n_palavras < n_pos)
+    return 0;
+
   for (i = 0; i < m; i++)
   {
     mapaTab[i] = malloc(n * sizeof(int));
