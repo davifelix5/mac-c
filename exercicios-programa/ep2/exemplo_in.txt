@@ -1,0 +1,49 @@
+12 8
+-1 -1 0 -1 -1 0 -1 -1
+0 0 0 0 0 0 0 0
+-1 0 0 0 0 0 0 0
+-1 0 0 -1 0 0 -1 0
+0 0 -1 0 0 0 -1 0
+-1 0 0 0 -1 0 0 0
+-1 0 -1 0 0 0 0 0
+-1 0 0 0 -1 0 -1 0
+-1 0 0 -1 0 0 0 0
+0 0 0 0 0 -1 0 0
+0 0 0 0 -1 0 0 0
+-1 0 0 0 0 0 0 0
+34
+ab
+adido
+ai
+al
+am
+atice
+banc
+bo
+boca
+cao
+dam
+dm
+enaltecedor
+es
+et
+indo
+it
+itamaraca
+mito
+mo
+moa
+ms
+mud
+naus
+neonato
+permitir
+remessa
+res
+robustecida
+toast
+trem
+tri
+sobra1
+sobra2
+0
