@@ -46,4 +46,61 @@ trem
 tri
 sobra1
 sobra2
+11 11
+0 0 0 0 0 0 -1 -1 -1 0 0
+0 -1 0 0 0 0 0 -1 0 0 0
+0 0 0 0 0 -1 0 0 0 0 0
+0 0 0 0 -1 0 0 0 0 0 0
+0 0 0 -1 0 0 0 0 0 0 -1
+0 0 -1 0 0 0 0 0 -1 0 0
+-1 0 0 0 0 0 0 -1 0 0 0
+0 0 0 0 0 0 -1 0 0 0 0
+0 0 0 0 0 -1 0 0 0 0 0
+0 0 0 -1 0 0 0 0 0 -1 0
+0 0 -1 -1 -1 0 0 0 0 0 0
+44
+agatha
+tc
+grupo
+par
+aquem
+praxe
+ruim
+coagir
+dia
+missao
+en
+pista
+ni
+zangao
+pos
+genero
+gomo
+ingua
+bemol
+bau
+ruina
+il
+operar
+alarde
+aguia
+trem
+hum
+ap
+taxionomo
+crer
+oposto
+paga
+quinzenal
+rasa
+cisao
+migrar
+pneu
+isolar
+angu
+pomar
+gibi
+gene
+bip
+uo
 0
