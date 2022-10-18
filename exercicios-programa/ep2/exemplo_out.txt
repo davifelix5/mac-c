@@ -12,3 +12,16 @@ Instância 1
  b  o  c  a  *  m  u  d 
  *  r  e  m  e  s  s  a 
 
+Instância 2
+ a  g  a  t  h  a  *  *  *  t  c 
+ l  *  g  r  u  p  o  *  p  a  r 
+ a  q  u  e  m  *  p  r  a  x  e 
+ r  u  i  m  *  c  o  a  g  i  r 
+ d  i  a  *  m  i  s  s  a  o  * 
+ e  n  *  p  i  s  t  a  *  n  i 
+ *  z  a  n  g  a  o  *  p  o  s 
+ g  e  n  e  r  o  *  g  o  m  o 
+ i  n  g  u  a  *  b  e  m  o  l 
+ b  a  u  *  r  u  i  n  a  *  a 
+ i  l  *  *  *  o  p  e  r  a  r 
+

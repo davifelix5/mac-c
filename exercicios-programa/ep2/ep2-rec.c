@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "pilha.h"
-
 typedef struct
 {
   int tamanho;

@@ -49,18 +49,15 @@ int main()
 
         /* Verifica se uma palavra pode ser colocada horizontal ou verticalmente
           naquela posição */
-        vert = (i - 1 < 0 || tab[i - 1][j] == '*') && i + 1 < m && tab[i + 1][j] != '*';
-        hor = (j - 1 < 0 || tab[i][j - 1] == '*') && j + 1 < n && tab[i][j + 1] != '*';
+        if (tab[i][j] != '*')
+        {
+          vert = (i - 1 < 0 || tab[i - 1][j] == '*') && i + 1 < m && tab[i + 1][j] != '*';
+          hor = (j - 1 < 0 || tab[i][j - 1] == '*') && j + 1 < n && tab[i][j + 1] != '*';
 
-        if (vert && tab[i][j] != '*')
-        {
-          adicionaPosicao(i, j, VERTICAL, n_pos, posicoes);
-          n_pos++;
-        }
-        if (hor && tab[i][j] != '*')
-        {
-          adicionaPosicao(i, j, HORIZONTAL, n_pos, posicoes);
-          n_pos++;
+          if (vert)
+            adicionaPosicao(i, j, VERTICAL, n_pos++, posicoes);
+          if (hor)
+            adicionaPosicao(i, j, HORIZONTAL, n_pos++, posicoes);
         }
       }
     }
@@ -136,7 +133,6 @@ int preenche(char **tab, int m, int n, palavra *palavras, posicao *posicoes, int
       item x;
       /* Empilha */
       palavras[palv - 1].utilizada = 1;
-      x.posicao = pos;
       x.palavra = palv - 1;
 
       empilha(encaixes, x);
@@ -153,7 +149,7 @@ int preenche(char **tab, int m, int n, palavra *palavras, posicao *posicoes, int
     {
       /* Desempilha */
       item ultimo = desempilha(encaixes);
-      pos = ultimo.posicao;
+      pos--; /* Volta para a posição anterior */
       palv = ultimo.palavra + 1;
       palavras[palv - 1].utilizada = 0;
 

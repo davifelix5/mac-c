@@ -1,7 +1,6 @@
 typedef struct
 {
   int palavra;
-  int posicao;
 } item;
 
 typedef struct
