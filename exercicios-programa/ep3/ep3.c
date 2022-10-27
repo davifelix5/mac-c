@@ -30,6 +30,8 @@ int main()
 
   preencheVetor(arvorePalavras, frequencias);
 
+  printf("ALTURA DA ÁRVORE: %d\n\n", altura(arvorePalavras));
+
   for (i = 0; i < n; i++)
   {
     int freq = inputs[i];
@@ -59,7 +61,7 @@ void preencheVetor(no *raiz, cel **frequencias)
   if (raiz != NULL)
   {
     preencheVetor(raiz->dir, frequencias);
-    frequencias[raiz->freq] = insereNoComeco(frequencias[raiz->freq], raiz->plv);
+    frequencias[raiz->freq] = insereNoComeco(frequencias[raiz->freq], raiz);
     preencheVetor(raiz->esq, frequencias);
   }
 }
@@ -96,11 +98,25 @@ void liberaArvore(no *raiz)
   }
 }
 
-cel *insereNoComeco(cel *inicio, char *plv)
+int altura(no *raiz)
+{
+  int hdir, hesq;
+  if (raiz == NULL)
+    return -1;
+
+  hdir = altura(raiz->dir);
+  hesq = altura(raiz->esq);
+
+  if (hdir > hesq)
+    return 1 + hdir;
+  return 1 + hesq;
+}
+
+cel *insereNoComeco(cel *inicio, no *no_plv)
 {
   cel *nova = malloc(sizeof(cel));
   nova->prox = inicio;
-  copiaPalavra(nova->plv, plv);
+  nova->no_palavra = no_plv;
   return nova;
 }
 
@@ -108,7 +124,7 @@ void imprimeLista(cel *inicio)
 {
   if (inicio != NULL)
   {
-    printf("%s\n", inicio->plv);
+    printf("%s\n", inicio->no_palavra->plv);
     imprimeLista(inicio->prox);
   }
 }

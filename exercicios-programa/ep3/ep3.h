@@ -13,7 +13,7 @@ typedef struct no_arvore
 typedef struct cel_lista
 {
   struct cel_lista *prox;
-  char plv[LEN];
+  no *no_palavra;
 } cel;
 
 /* Percorre a árvore pós-ordem e preenche o vetor de frequências  */
@@ -27,10 +27,13 @@ no *atualizaArvore(no *raiz, char plv[LEN], int *maxFreq);
 /* Libera a árvore alocada */
 void liberaArvore(no *raiz);
 
+/* Retorno a altura da árvore */
+int altura(no *raiz);
+
 /* ------- FUNÇÕES DE LISTA LIGADA------- */
 
 /* Insere um elemento no começo da lista ligada */
-cel *insereNoComeco(cel *inicio, char *plv);
+cel *insereNoComeco(cel *inicio, no *no_plv);
 
 void imprimeLista(cel *inicio);
 
