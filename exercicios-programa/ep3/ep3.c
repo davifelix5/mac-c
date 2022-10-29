@@ -10,8 +10,8 @@ int main()
   cel **frequencias;
 
   int maxFreq = 0, i;
-  int *inputs, n;
-  char plv[50];
+  int *inputs, n, qtdPalavras = 0, palavrasDiferentes = 0;
+  char plvValida[LEN], plv[LEN];
 
   /* Quantidade de inputs */
   scanf("%d", &n);
@@ -22,7 +22,12 @@ int main()
     scanf("%d", &inputs[i]);
 
   while (scanf("%s", plv) == 1)
-    arvorePalavras = atualizaArvore(arvorePalavras, limpaPalavra(plv), &maxFreq);
+  {
+    limpaPalavra(plv, plvValida);
+    qtdPalavras++;
+    palavrasDiferentes++;
+    arvorePalavras = atualizaArvore(arvorePalavras, plvValida, &maxFreq, &palavrasDiferentes);
+  }
 
   frequencias = malloc((maxFreq + 1) * sizeof(cel *));
   for (i = 0; i <= maxFreq; i++)
@@ -30,14 +35,18 @@ int main()
 
   preencheVetor(arvorePalavras, frequencias);
 
-  printf("ALTURA DA ÁRVORE: %d\n\n", altura(arvorePalavras));
+  printf("-- DIAGNÓSTICO DA EXECUÇÃO --\n");
+  printf("Altura da árvore: %d\n", altura(arvorePalavras));
+  printf("Quantidade total de palavras: %d\n", qtdPalavras);
+  printf("Quantidade de palavras na árvore: %d\n\n", palavrasDiferentes);
 
+  printf("-- RESPOSTAS --\n");
   for (i = 0; i < n; i++)
   {
     int freq = inputs[i];
     printf("Frequência %d: \n", freq);
 
-    if (frequencias[freq] == NULL)
+    if (freq > maxFreq || frequencias[freq] == NULL)
       printf("Não há palavras com essa frequência\n");
     else
       imprimeLista(frequencias[freq]);
@@ -66,7 +75,7 @@ void preencheVetor(no *raiz, cel **frequencias)
   }
 }
 
-no *atualizaArvore(no *raiz, char plv[LEN], int *maxFreq)
+no *atualizaArvore(no *raiz, char plv[LEN], int *maxFreq, int *qtdPalavras)
 {
   if (raiz == NULL)
   {
@@ -76,11 +85,14 @@ no *atualizaArvore(no *raiz, char plv[LEN], int *maxFreq)
     copiaPalavra(raiz->plv, plv);
   }
   else if (comparaPalavra(plv, raiz->plv) < 0)
-    raiz->esq = atualizaArvore(raiz->esq, plv, maxFreq);
+    raiz->esq = atualizaArvore(raiz->esq, plv, maxFreq, qtdPalavras);
   else if (comparaPalavra(plv, raiz->plv) > 0)
-    raiz->dir = atualizaArvore(raiz->dir, plv, maxFreq);
+    raiz->dir = atualizaArvore(raiz->dir, plv, maxFreq, qtdPalavras);
   else
+  {
+    (*qtdPalavras)--;
     raiz->freq += 1;
+  }
 
   if (raiz->freq > *maxFreq)
     *maxFreq = raiz->freq;
@@ -166,18 +178,15 @@ int comparaPalavra(char *plv1, char *plv2)
   return plv1[i] != '\0';
 }
 
-char *limpaPalavra(char *plv)
+void limpaPalavra(char *plv, char *plvValida)
 {
-  int i, valida = 1;
+  int i, j;
 
-  for (i = 0; plv[i] != '\0' && valida; i++)
-    if ((lower(plv[i]) < 'a' || lower(plv[i] > 'z')) && plv[i] != '-')
-    {
-      plv[i] = '\0';
-      valida = 0;
-    }
+  for (i = 0, j = 0; plv[i] != '\0'; i++)
+    if ((lower(plv[i]) >= 'a' && lower(plv[i] <= 'z')) || plv[i] == '-')
+      plvValida[j++] = plv[i];
 
-  return plv;
+  plvValida[j] = '\0';
 }
 
 char lower(char c)

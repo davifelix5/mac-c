@@ -1,6 +1,6 @@
 /* DEFINIÇÕES E TIPOS */
 
-#define LEN 50
+#define LEN 1150
 
 typedef struct no_arvore
 {
@@ -16,13 +16,15 @@ typedef struct cel_lista
   no *no_palavra;
 } cel;
 
+/* ------- FUNÇÕES GERAIS ------- */
+
 /* Percorre a árvore pós-ordem e preenche o vetor de frequências  */
 void preencheVetor(no *raiz, cel **frequencias);
 
 /* ------- FUNÇÕES DE ÁRVORE ------- */
 
 /* Atualiza as palavras e suas frequências correspondes na árvore */
-no *atualizaArvore(no *raiz, char plv[LEN], int *maxFreq);
+no *atualizaArvore(no *raiz, char plv[LEN], int *maxFreq, int *qtdPalavras);
 
 /* Libera a árvore alocada */
 void liberaArvore(no *raiz);
@@ -57,4 +59,4 @@ int comparaPalavra(char *plv1, char *plv2);
 char lower(char c);
 
 /* Remove sinais de pontuação no fim da palavra  */
-char *limpaPalavra(char *plv);
+void limpaPalavra(char *plv, char *plvValida);
