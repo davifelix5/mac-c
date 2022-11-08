@@ -38,7 +38,8 @@ int main()
   printf("-- DIAGNÓSTICO DA EXECUÇÃO --\n");
   printf("Altura da árvore: %d\n", altura(arvorePalavras));
   printf("Quantidade total de palavras: %d\n", qtdPalavras);
-  printf("Quantidade de palavras na árvore: %d\n\n", palavrasDiferentes);
+  printf("Quantidade de palavras na árvore: %d\n", palavrasDiferentes);
+  printf("Frequência máxima %d\n\n", maxFreq);
 
   printf("-- RESPOSTAS --\n");
   for (i = 0; i < n; i++)
