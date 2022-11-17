@@ -6,23 +6,22 @@
 
 int main()
 {
+  FILE *input;
+
   no *arvorePalavras = NULL;
   cel **frequencias;
 
   int maxFreq = 0, i;
-  int *inputs, n, qtdPalavras = 0, palavrasDiferentes = 0;
-  char plvValida[LEN], plv[LEN];
+  int k, qtdPalavras = 0, palavrasDiferentes = 0;
+  char plvValida[LEN], plv[LEN], filename[20];
 
-  /* Quantidade de inputs */
-  scanf("%d", &n);
+  scanf("%s", filename);
 
-  inputs = malloc(n * sizeof(int));
+  input = fopen(filename, "r");
 
-  for (i = 0; i < n; i++)
-    scanf("%d", &inputs[i]);
-
-  while (scanf("%s", plv) == 1)
+  while (!feof(input))
   {
+    fscanf(input, "%s", plv);
     limpaPalavra(plv, plvValida);
     qtdPalavras++;
     palavrasDiferentes++;
@@ -42,18 +41,19 @@ int main()
   printf("Frequência máxima %d\n\n", maxFreq);
 
   printf("-- RESPOSTAS --\n");
-  for (i = 0; i < n; i++)
+  do
   {
-    int freq = inputs[i];
-    printf("Frequência %d: \n", freq);
+    k = 0;
+    scanf("%d", &k);
+    printf("Frequência %d: \n", k);
 
-    if (freq > maxFreq || frequencias[freq] == NULL)
+    if (k <= 0 || k > maxFreq || frequencias[k] == NULL)
       printf("Não há palavras com essa frequência\n");
     else
-      imprimeLista(frequencias[freq]);
+      imprimeLista(frequencias[k]);
 
     printf("\n");
-  }
+  } while (k != 0);
 
   liberaArvore(arvorePalavras);
 
@@ -61,8 +61,7 @@ int main()
     liberaLista(frequencias[i]);
   free(frequencias);
 
-  free(inputs);
-
+  fclose(input);
   return 0;
 }
 
