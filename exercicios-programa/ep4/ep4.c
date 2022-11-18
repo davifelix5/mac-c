@@ -79,6 +79,13 @@ int main()
     fim = verificaVitoria(tab, n);
   }
 
+  if (fim == AZUL)
+    printf("Azul ganhou\n");
+  if (fim == PRETO)
+    printf("Preto ganhou\n");
+  else
+    printf("Empate");
+
   liberaTabuleiro(tab, n);
 
   return 0;
