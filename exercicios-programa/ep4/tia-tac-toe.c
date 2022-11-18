@@ -18,7 +18,7 @@ int modulo(int x);
 
 int main()
 {
-  int n = 5;
+  int n = 4;
   int **tab = malloc(n * sizeof(int *));
   int i, j;
   int i_usuario, j_usuario;
@@ -27,8 +27,8 @@ int main()
 
   criaTabuleiro(tab, n);
 
-  /*escolheJogada(tab, &i, &j, n);
-  tab[i][j] = COMPUTER; */
+  escolheJogada(tab, &i, &j, n);
+  tab[i][j] = COMPUTER;
   printaTabuleiro(tab, n);
 
   while (ganhador == 0 && temJogadas(tab, n))
@@ -132,8 +132,13 @@ int minimax(int **tab, int profundidade, int isMax, int alpha, int beta, int n)
 {
   int evaluate = verificaVitoria(tab, n, NULL);
 
-  if (modulo(evaluate) == 100 * n || profundidade == 0)
-    return evaluate;
+  if (modulo(evaluate) == 100 * n)
+  {
+    if (evaluate < 0)
+      return evaluate + profundidade;
+    else
+      return evaluate - profundidade;
+  }
 
   if (!temJogadas(tab, n))
     return 0;
@@ -147,7 +152,7 @@ int minimax(int **tab, int profundidade, int isMax, int alpha, int beta, int n)
         if (tab[i][j] == 0)
         {
           tab[i][j] = COMPUTER;
-          value = minimax(tab, profundidade - 1, !isMax, alpha, beta, n);
+          value = minimax(tab, profundidade + 1, !isMax, alpha, beta, n);
           if (value > best)
             best = value;
           if (best > alpha)
@@ -171,7 +176,7 @@ int minimax(int **tab, int profundidade, int isMax, int alpha, int beta, int n)
         if (tab[i][j] == 0)
         {
           tab[i][j] = USER;
-          value = minimax(tab, profundidade - 1, !isMax, alpha, beta, n);
+          value = minimax(tab, profundidade + 1, !isMax, alpha, beta, n);
           if (value < best)
             best = value;
           if (best < beta)
@@ -203,7 +208,7 @@ void escolheJogada(int **tab, int *i, int *j, int n)
       if (tab[lin][col] == 0)
       {
         tab[lin][col] = COMPUTER;
-        value = minimax(tab, 5, 0, MIN, MAX, n);
+        value = minimax(tab, 0, 0, MIN, MAX, n);
         tab[lin][col] = 0;
         if (value > best)
         {
@@ -234,12 +239,12 @@ int pontuar(int p1, int p2, int n, int *ganhador)
   {
     if (ganhador != NULL)
       *ganhador = USER;
-    points = 100 * n;
+    points = -100 * n;
   }
-  else if (p1 == 0)
+  /*else if (p1 == 0)
     points = -10 * n;
   else if (p2 == 0)
-    points = 10 * n;
+    points = 10 * n; */
   else
     points = 0;
   return points;
